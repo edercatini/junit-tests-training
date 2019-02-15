@@ -11,8 +11,7 @@ public class CheckStockService {
 
 		for (Movie movie : movies) {
 			if (movie.getStock() == 0) {
-				throw new OutOfStockException("Insuficient stock for " + movie.getName(),
-						new Throwable("Insuficient stock for " + movie.getName()));
+				throw new OutOfStockException("Insufficient stock", new Throwable("Insufficient stock"));
 			}
 		}
 

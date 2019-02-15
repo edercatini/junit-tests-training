@@ -1,7 +1,5 @@
 package br.ec.services;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,14 +16,6 @@ public class EmptyUserServiceTest {
 	public EmptyUserServiceTest() {
 		this.exception = ExpectedException.none();
 		this.service = new EmptyUserService();
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
 	}
 
 	@Test

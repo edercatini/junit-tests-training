@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -38,14 +36,6 @@ public class LocationServiceTest {
 	private LocationService locationService = new LocationService(new CheckStockService(), new EmptyUserService(), new EmptyMovieCollectionService());
 
 	private Format formatter = new SimpleDateFormat();
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
-	}
 
 	private Location rentMovies(User user, List<Movie> movies) throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		return locationService.rentMovies(user, movies);

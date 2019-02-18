@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.ec.builders.UserDataBuilder;
 import br.ec.domain.Location;
 import br.ec.domain.Movie;
 import br.ec.domain.User;
@@ -36,7 +37,9 @@ public class LocationServiceTest {
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 
-	private User user = new User("Usuário 1");
+	private User user = UserDataBuilder.aUser()
+		.withName("Usuário 1")
+		.build();
 
 	private LocationService locationService = new LocationService(new CheckStockService(), new EmptyUserService(),
 			new EmptyMovieCollectionService());

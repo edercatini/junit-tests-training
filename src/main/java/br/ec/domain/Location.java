@@ -36,8 +36,8 @@ public class Location {
 		return this.movies;
 	}
 
-	public Location setMovie(Movie movie) {
-		this.movies.add(movie);
+	public Location setMovies(List<Movie> movies) {
+		this.movies = movies;
 		return this;
 	}
 

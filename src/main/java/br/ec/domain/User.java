@@ -11,11 +11,11 @@ public class User {
 		this.name = name;
 	}
 
-	public String getNome() {
+	public String getName() {
 		return this.name;
 	}
 
-	public User setNome(String name) {
+	public User setName(String name) {
 		this.name = name;
 		return this;
 	}

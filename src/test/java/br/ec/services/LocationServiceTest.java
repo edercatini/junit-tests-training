@@ -5,11 +5,13 @@ import static br.ec.utils.DateUtils.incrementCurrentDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -123,10 +125,10 @@ public class LocationServiceTest {
 
 	@Test
 	public void mustReturnOnMondayIfLocationHappensOnSaturday() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		if (DateUtils.verifyWeekDay(new Date(), 6)) {
-			List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d)));
-			Location location = this.rentMovies(this.user, movies);
-			assertEquals(this.formatter.format(location.getReturningDate()), this.formatter.format(addDays(new Date(), 2)));
-		}
+		assumeTrue(DateUtils.verifyWeekDay(new Date(), Calendar.SATURDAY));
+
+		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d)));
+		Location location = this.rentMovies(this.user, movies);
+		assertEquals(this.formatter.format(location.getReturningDate()), this.formatter.format(addDays(new Date(), 2)));
 	}
 }

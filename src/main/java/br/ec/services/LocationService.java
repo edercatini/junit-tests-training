@@ -2,6 +2,7 @@ package br.ec.services;
 
 import static br.ec.utils.DateUtils.addDays;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public class LocationService {
 	private Date getReturningDate() {
 		Date returningDate = addDays(new Date(), 1);
 
-		if (DateUtils.verifyWeekDay(returningDate, 1)) {
+		if (DateUtils.verifyWeekDay(returningDate, Calendar.SUNDAY)) {
 			returningDate = addDays(returningDate, 1);
 		}
 

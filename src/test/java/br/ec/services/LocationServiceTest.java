@@ -1,5 +1,6 @@
 package br.ec.services;
 
+import static br.ec.utils.DateUtils.addDays;
 import static br.ec.utils.DateUtils.incrementCurrentDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,6 +24,7 @@ import br.ec.domain.User;
 import br.ec.exceptions.EmptyMovieCollectionException;
 import br.ec.exceptions.EmptyUserException;
 import br.ec.exceptions.OutOfStockException;
+import br.ec.utils.DateUtils;
 
 public class LocationServiceTest {
 
@@ -37,97 +39,72 @@ public class LocationServiceTest {
 	private LocationService locationService = new LocationService(new CheckStockService(), new EmptyUserService(),
 			new EmptyMovieCollectionService());
 
-	private Format formatter = new SimpleDateFormat();
+	private Format formatter = new SimpleDateFormat("d/M/Y");
 
-	private Location rentMovies(User user, List<Movie> movies)
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+	private Location rentMovies(User user, List<Movie> movies) throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		return locationService.rentMovies(user, movies);
 	}
 
 	@Test
-	public void mustBillASingleMoviePrice()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+	public void mustBillASingleMoviePrice() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 5d)));
 		error.checkThat(this.rentMovies(this.user, movies).getBillingValue(), is(equalTo(5d)));
 	}
 
 	@Test
-	public void locationDateMustBeCurrentDate()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+	public void locationDateMustBeCurrentDate() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 5d)));
-		error.checkThat(this.formatter.format(this.rentMovies(this.user, movies).getLocationDate()),
-				is(equalTo(formatter.format(new Date()))));
+		error.checkThat(this.formatter.format(this.rentMovies(this.user, movies).getLocationDate()), is(equalTo(formatter.format(new Date()))));
 	}
 
 	@Test
-	public void returningDateMustBeNextDay()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+	public void returningDateMustBeNextDay() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 5d)));
-
-		error.checkThat(this.formatter.format(this.rentMovies(user, movies).getReturningDate()),
-				is(equalTo(formatter.format(incrementCurrentDate(1)))));
+		error.checkThat(this.formatter.format(this.rentMovies(user, movies).getReturningDate()), is(equalTo(formatter.format(incrementCurrentDate(1)))));
 	}
 
 	@Test
-	public void mustNotRentIfStockIsInsufficientForAtLeastOneMovie()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(
-				Arrays.asList(new Movie("Filme 1", 0, 5d), new Movie("Filme 2", 1, 5d)));
-
+	public void mustNotRentIfStockIsInsufficientForAtLeastOneMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 0, 5d), new Movie("Filme 2", 1, 5d)));
 		this.exception.expect(OutOfStockException.class);
 		this.exception.expectMessage("Insufficient stock");
-
 		this.rentMovies(this.user, movies);
 	}
 
 	@Test
-	public void mustNotRentIfUserIsInvalid()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(
-				Arrays.asList(new Movie("Filme 1", 1, 5d), new Movie("Filme 2", 1, 5d)));
-
+	public void mustNotRentIfUserIsInvalid() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 5d), new Movie("Filme 2", 1, 5d)));
 		this.exception.expect(EmptyUserException.class);
 		this.exception.expectMessage("Invalid User");
-
 		this.rentMovies(null, movies);
 	}
 
 	@Test
-	public void mustNotRentIfMovieCollectionIsEmpty()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+	public void mustNotRentIfMovieCollectionIsEmpty() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		this.exception.expect(EmptyMovieCollectionException.class);
 		this.exception.expectMessage("Invalid Movie Collection");
 		this.rentMovies(this.user, new ArrayList<Movie>());
 	}
 
 	@Test
-	public void mustGive25PercentDiscountOnThirdRentMovie()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(
-				Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d)));
-
+	public void mustGive25PercentDiscountOnThirdRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d)));
 		Location location = this.rentMovies(this.user, movies);
-
 		assertEquals(11d, location.getBillingValue(), 0.001);
 	}
 
 	@Test
-	public void mustGive50PercentDiscountOnFourthRentMovie()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d),
-				new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d), new Movie("Filme 4", 1, 4d)));
-
+	public void mustGive50PercentDiscountOnFourthRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
+			new Movie("Filme 4", 1, 4d)));
 		Location location = this.rentMovies(this.user, movies);
-
 		assertEquals(13d, location.getBillingValue(), 0.001);
 	}
 
 	@Test
-	public void mustGive75PercentDiscountOnFifthRentMovie()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(
-				Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
-						new Movie("Filme 4", 1, 4d), new Movie("Filme 5", 1, 4d)));
+	public void mustGive75PercentDiscountOnFifthRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
+			new Movie("Filme 4", 1, 4d), new Movie("Filme 5", 1, 4d)));
 
 		Location location = this.rentMovies(this.user, movies);
 
@@ -135,14 +112,21 @@ public class LocationServiceTest {
 	}
 
 	@Test
-	public void mustGive100PercentDiscountOnSixthRentMovie()
-			throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+	public void mustGive100PercentDiscountOnSixthRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		List<Movie> movies = new ArrayList<Movie>(
 				Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
-						new Movie("Filme 4", 1, 4d), new Movie("Filme 5", 1, 4d), new Movie("Filme 6", 1, 4d)));
+					new Movie("Filme 4", 1, 4d), new Movie("Filme 5", 1, 4d), new Movie("Filme 6", 1, 4d)));
 
 		Location location = this.rentMovies(this.user, movies);
-
 		assertEquals(14d, location.getBillingValue(), 0.001);
+	}
+
+	@Test
+	public void mustReturnOnMondayIfLocationHappensOnSaturday() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
+		if (DateUtils.verifyWeekDay(new Date(), 6)) {
+			List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d)));
+			Location location = this.rentMovies(this.user, movies);
+			assertEquals(this.formatter.format(location.getReturningDate()), this.formatter.format(addDays(new Date(), 2)));
+		}
 	}
 }

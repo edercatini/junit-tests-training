@@ -45,7 +45,7 @@ public class DateUtils {
 	public static boolean verifyWeekDay(Date date, int weekDay) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-
+System.out.println(calendar.get(DAY_OF_WEEK));
 		return calendar.get(DAY_OF_WEEK) == weekDay;
 	}
 }

@@ -39,9 +39,13 @@ public class LocationDataBuilder {
 		this.location.setReturningDate(returningDate);
 		return this;
 	}
-	
+
 	public LocationDataBuilder withBillingValue(Double billingValue) {
 		this.location.setBillingValue(billingValue);
 		return this;
+	}
+
+	public Location build() {
+		return this.location;
 	}
 }

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.ec.builders.MovieDataBuilder;
 import br.ec.domain.Movie;
 import br.ec.exceptions.OutOfStockException;
 
@@ -31,7 +32,11 @@ public class CheckStockServiceTest {
 
 	@Test
 	public void mustThrowOutOfStockExceptionIfOneMovieHasInsufficientStockForRent() throws OutOfStockException {
-		this.movies.addAll(Arrays.asList(new Movie("Filme 1", 0, 5d), new Movie("Filme 2", 1, 5d)));
+		this.movies = new ArrayList<Movie>(Arrays.asList(
+			MovieDataBuilder.aMovie().withLocationPrice(5d).withName("Filme 1").withNumberInStock(2).build(),
+			MovieDataBuilder.aMovie().withLocationPrice(5d).withName("Filme 2").withNumberInStock(0).build()
+		));
+
 		this.exception.expect(OutOfStockException.class);
 		this.exception.expectMessage("Insufficient stock");
 

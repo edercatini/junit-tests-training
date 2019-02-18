@@ -30,7 +30,7 @@ public class MovieDataBuilder {
 		return this;
 	}
 
-	public Movie builder() {
+	public Movie build() {
 		return this.movie;
 	}
 }

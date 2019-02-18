@@ -13,6 +13,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
+import br.ec.builders.MovieDataBuilder;
+import br.ec.builders.UserDataBuilder;
 import br.ec.domain.Location;
 import br.ec.domain.Movie;
 import br.ec.domain.User;
@@ -37,19 +39,19 @@ public class LocationValueDataDrivenTest {
 	private User user;
 
 	// Atributos utilizados como parâmetros dos testes
-	private static Movie filme1 = new Movie("Filme 1", 2, 4.0);
-	private static Movie filme2 = new Movie("Filme 2", 2, 4.0);
-	private static Movie filme3 = new Movie("Filme 3", 2, 4.0);
-	private static Movie filme4 = new Movie("Filme 4", 2, 4.0);
-	private static Movie filme5 = new Movie("Filme 5", 2, 4.0);
-	private static Movie filme6 = new Movie("Filme 6", 2, 4.0);
-	private static Movie filme7 = new Movie("Filme 7", 2, 4.0);	
-	private static Movie filme8 = new Movie("Filme 8", 2, 4.0);
+	private static Movie filme1 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 1").withNumberInStock(2).build();
+	private static Movie filme2 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 2").withNumberInStock(2).build();
+	private static Movie filme3 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 3").withNumberInStock(2).build();
+	private static Movie filme4 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 4").withNumberInStock(2).build();
+	private static Movie filme5 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 5").withNumberInStock(2).build();
+	private static Movie filme6 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 6").withNumberInStock(2).build();
+	private static Movie filme7 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 7").withNumberInStock(2).build();
+	private static Movie filme8 = MovieDataBuilder.aMovie().withLocationPrice(4.0).withName("Movie 8").withNumberInStock(2).build();
 
 	@Before
 	public void setUp() {
 		this.service = new LocationService(new CheckStockService(), new EmptyUserService(), new EmptyMovieCollectionService());
-		this.user = new User("User");
+		this.user = UserDataBuilder.aUser().withName("User 1").build();
 	}
 
 	@Parameters(name = "Teste {index} = {2} - {1}")

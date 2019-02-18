@@ -3,7 +3,9 @@ package br.ec.services;
 import static br.ec.utils.DateUtils.addDays;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.ec.domain.Location;
 import br.ec.domain.Movie;
@@ -33,10 +35,25 @@ public class LocationService {
 		this.emptyMovieCollectionService.check(movies);
 		this.checkStockService.inStock(movies);
 
-		Double amountToPay = 0d;
+		Map<Integer, Double> discount = new HashMap<Integer, Double>();
+		discount.put(2, 0.75);
+		discount.put(3, 0.5);
+		discount.put(4, 0.25);
+		discount.put(5, 0.0);
+
+		Double amountToPay = 0.0, discountRate = 0.0;
+		Integer movieIndex = 0;
 
 		for (Movie movie : movies) {
-			amountToPay += movie.getLocationPrice();
+			discountRate = 1.0;
+
+			if (discount.containsKey(movieIndex)) {
+				discountRate = discount.get(movieIndex);
+			}
+
+			amountToPay += movie.getLocationPrice() * discountRate;
+//			System.out.println("Amount To pay: " + amountToPay);
+			movieIndex++;
 		}
 
 		Location location = new Location(user, movies, new Date(), addDays(new Date(), 1), amountToPay);

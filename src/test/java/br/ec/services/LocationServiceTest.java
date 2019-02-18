@@ -89,41 +89,6 @@ public class LocationServiceTest {
 	}
 
 	@Test
-	public void mustGive25PercentDiscountOnThirdRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d)));
-		Location location = this.rentMovies(this.user, movies);
-		assertEquals(11d, location.getBillingValue(), 0.001);
-	}
-
-	@Test
-	public void mustGive50PercentDiscountOnFourthRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
-			new Movie("Filme 4", 1, 4d)));
-		Location location = this.rentMovies(this.user, movies);
-		assertEquals(13d, location.getBillingValue(), 0.001);
-	}
-
-	@Test
-	public void mustGive75PercentDiscountOnFifthRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
-			new Movie("Filme 4", 1, 4d), new Movie("Filme 5", 1, 4d)));
-
-		Location location = this.rentMovies(this.user, movies);
-
-		assertEquals(14d, location.getBillingValue(), 0.001);
-	}
-
-	@Test
-	public void mustGive100PercentDiscountOnSixthRentMovie() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
-		List<Movie> movies = new ArrayList<Movie>(
-				Arrays.asList(new Movie("Filme 1", 1, 4d), new Movie("Filme 2", 1, 4d), new Movie("Filme 3", 1, 4d),
-					new Movie("Filme 4", 1, 4d), new Movie("Filme 5", 1, 4d), new Movie("Filme 6", 1, 4d)));
-
-		Location location = this.rentMovies(this.user, movies);
-		assertEquals(14d, location.getBillingValue(), 0.001);
-	}
-
-	@Test
 	public void mustReturnOnMondayIfLocationHappensOnSaturday() throws OutOfStockException, EmptyUserException, EmptyMovieCollectionException {
 		assumeTrue(DateUtils.verifyWeekDay(new Date(), Calendar.SATURDAY));
 

@@ -1,6 +1,7 @@
 package br.ec.services;
 
 import static br.ec.utils.DateUtils.addDays;
+import static br.ec.utils.DateUtils.verifyWeekDay;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +15,6 @@ import br.ec.domain.User;
 import br.ec.exceptions.EmptyMovieCollectionException;
 import br.ec.exceptions.EmptyUserException;
 import br.ec.exceptions.OutOfStockException;
-import br.ec.utils.DateUtils;
 
 public class LocationService {
 
@@ -36,13 +36,7 @@ public class LocationService {
 		this.emptyMovieCollectionService.check(movies);
 		this.checkStockService.inStock(movies);
 
-		Location location = new Location(
-			user,
-			movies,
-			new Date(),
-			this.getReturningDate(),
-			this.getAmountToPay(movies, this.getDiscountMap())
-		);
+		Location location = new Location(user, movies, new Date(), this.getReturningDate(), this.getAmountToPay(movies, this.getDiscountMap()));
 
 		// Saving location
 		// TODO
@@ -63,7 +57,7 @@ public class LocationService {
 	private Date getReturningDate() {
 		Date returningDate = addDays(new Date(), 1);
 
-		if (DateUtils.verifyWeekDay(returningDate, Calendar.SUNDAY)) {
+		if (verifyWeekDay(returningDate, Calendar.SUNDAY)) {
 			returningDate = addDays(returningDate, 1);
 		}
 
